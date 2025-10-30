@@ -4,6 +4,7 @@ import { WebSocketServer } from 'ws';
 import { config } from './config';
 import { SolanaService } from './services/solana.service';
 import { MakerService } from './services/maker.service';
+import { TakerService } from './services/taker.service';
 import { CrankService } from './services/crank.service';
 import { ApiService } from './services/api.service';
 
@@ -16,6 +17,7 @@ async function main() {
     await solanaService.initialize();
 
     const makerService = new MakerService(solanaService);
+    const takerService = new TakerService(solanaService);
     const crankService = new CrankService(solanaService);
     const apiService = new ApiService(solanaService);
 
@@ -29,8 +31,9 @@ async function main() {
     apiService.setupWebSocket(wss);
 
     await makerService.start();
+    await takerService.start();
     await crankService.start();
-    
+
     console.log('All services started successfully');
 }
 

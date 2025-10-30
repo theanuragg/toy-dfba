@@ -6,7 +6,7 @@ import { config } from '../config';
 export class MakerService {
     private intervalId: NodeJS.Timeout | null = null;
     private basePrice = 100;
-    private spread = 0.01;
+    private spread = 0.00005;
 
     constructor(private solanaService: SolanaService) {}
 
@@ -58,10 +58,10 @@ export class MakerService {
 
         const orders = [];
 
-        // Create 10 buy maker orders
-        for (let i = 0; i < 10; i++) {
+        // Place 15 buy maker orders at progressively lower prices
+        for (let i = 0; i < 15; i++) {
             const buyPrice = currentMid * (1 - this.spread * (1 + i * 0.15));
-            const buyQuantity = 100 + Math.floor(Math.random() * 400);
+            const buyQuantity = 1000 + Math.floor(Math.random() * 2000);
             orders.push({
                 orderType: { maker: {} },
                 side: { buy: {} },
@@ -70,45 +70,15 @@ export class MakerService {
             });
         }
 
-        // Create 10 sell maker orders
-        for (let i = 0; i < 10; i++) {
+        // Place 15 sell maker orders at progressively higher prices
+        for (let i = 0; i < 15; i++) {
             const sellPrice = currentMid * (1 + this.spread * (1 + i * 0.15));
-            const sellQuantity = 100 + Math.floor(Math.random() * 400);
+            const sellQuantity = 1000 + Math.floor(Math.random() * 2000);
             orders.push({
                 orderType: { maker: {} },
                 side: { sell: {} },
                 price: new BN(Math.floor(sellPrice * 1e6)),
                 quantity: new BN(sellQuantity),
-            });
-        }
-
-        // Add taker orders to generate auction volume
-        // IMPORTANT: Create both buy AND sell takers to ensure both queues have matches
-        const numTakerOrdersPerSide = 1 + Math.floor(Math.random() * 2); // 1-2 per side
-
-        // Buy taker orders (go to ask_queue to match with maker sells)
-        for (let i = 0; i < numTakerOrdersPerSide; i++) {
-            // Buy taker orders should be at or above the best ask to generate matches
-            const takerPrice = currentMid * (1 + this.spread * (1 + Math.random() * 0.5));
-            const takerQuantity = 50 + Math.floor(Math.random() * 200);
-            orders.push({
-                orderType: { taker: {} },
-                side: { buy: {} },
-                price: new BN(Math.floor(takerPrice * 1e6)),
-                quantity: new BN(takerQuantity),
-            });
-        }
-
-        // Sell taker orders (go to bid_queue to match with maker buys)
-        for (let i = 0; i < numTakerOrdersPerSide; i++) {
-            // Sell taker orders should be at or below the best bid to generate matches
-            const takerPrice = currentMid * (1 - this.spread * (1 + Math.random() * 0.5));
-            const takerQuantity = 50 + Math.floor(Math.random() * 200);
-            orders.push({
-                orderType: { taker: {} },
-                side: { sell: {} },
-                price: new BN(Math.floor(takerPrice * 1e6)),
-                quantity: new BN(takerQuantity),
             });
         }
 
@@ -124,8 +94,7 @@ export class MakerService {
                 .signers([config.makerKeypair])
                 .rpc();
 
-            const totalTakers = numTakerOrdersPerSide * 2;
-            console.log(`Posted ${orders.length} orders (20 maker + ${totalTakers} taker): ${tx}`);
+            console.log(`Posted ${orders.length} maker orders: ${tx}`);
             return tx;
         } catch (error) {
             console.error('Failed to post orders:', error);
