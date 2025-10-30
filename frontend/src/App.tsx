@@ -21,8 +21,7 @@ function App() {
                 <WalletModalProvider>
                     <div className="App">
                         <header className="App-header">
-                            <h1>Dual Flow Batch Auction MVP</h1>
-                            <p>Demonstrating 400ms batch auctions on Solana</p>
+                            <h3>Archer - A MEV resistant auctions exchange on Solana</h3>
                         </header>
                         <div className="main-content">
                             <div className="left-panel">

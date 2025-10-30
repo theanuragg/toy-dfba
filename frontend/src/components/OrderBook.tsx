@@ -56,12 +56,12 @@ export const OrderBook: React.FC = () => {
                 <span>Type</span>
             </div>
             <div className="asks">
-                <h3>Asks (Maker Sells + Taker Buys)</h3>
+                <h3>Asks</h3>
                 {renderOrders(askOrders, 'ask')}
             </div>
             <div className="spread-divider"></div>
             <div className="bids">
-                <h3>Bids (Maker Buys + Taker Sells)</h3>
+                <h3>Bids</h3>
                 {renderOrders(bidOrders, 'bid')}
             </div>
         </div>

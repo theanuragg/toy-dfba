@@ -1,6 +1,6 @@
 {
-  "short_name": "DFBA",
-  "name": "Dual Flow Batch Auction",
+  "short_name": "Archer",
+  "name": "Archer - A MEV resistant auctions exchange on Solana",
   "icons": [],
   "start_url": ".",
   "display": "standalone",
