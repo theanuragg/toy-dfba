@@ -106,51 +106,98 @@ fn execute_trades_at_price(
     price: u64,
     auction_type: &AuctionType,
 ) {
-    let mut remaining_volume =
-        calculate_volume_at_price(maker_orders, taker_orders, price, auction_type);
+    let total_volume = calculate_volume_at_price(maker_orders, taker_orders, price, auction_type);
+    let mut remaining_volume = total_volume;
 
-    for order in taker_orders.iter_mut() {
-        if remaining_volume == 0 {
-            break;
-        }
+    let mut price_groups: Vec<Vec<usize>> = Vec::new();
+    let mut current_group: Vec<usize> = Vec::new();
+    let mut last_price: Option<u64> = None;
 
+    for (idx, order) in taker_orders.iter().enumerate() {
         let can_fill = match auction_type {
             AuctionType::Bid => order.price <= price,
             AuctionType::Ask => order.price >= price,
         };
 
-        if can_fill {
-            let fill_amount = (order.quantity - order.filled_quantity).min(remaining_volume);
+        if !can_fill {
+            continue;
+        }
+
+        if let Some(last_p) = last_price {
+            if order.price != last_p {
+                if !current_group.is_empty() {
+                    price_groups.push(current_group.clone());
+                    current_group.clear();
+                }
+            }
+        }
+
+        current_group.push(idx);
+        last_price = Some(order.price);
+    }
+
+    if !current_group.is_empty() {
+        price_groups.push(current_group);
+    }
+
+    for group in price_groups {
+        if remaining_volume == 0 {
+            break;
+        }
+
+        let mut level_volume = 0;
+        for &idx in &group {
+            let order = &taker_orders[idx];
+            level_volume += order.quantity - order.filled_quantity;
+        }
+
+        let volume_to_fill = level_volume.min(remaining_volume);
+
+        for &idx in &group {
+            let order = &mut taker_orders[idx];
+            let available = order.quantity - order.filled_quantity;
+            let fill_amount = (available * volume_to_fill) / level_volume;
+            order.filled_quantity += fill_amount;
+        }
+
+        remaining_volume -= volume_to_fill;
+    }
+
+    remaining_volume = total_volume;
+
+    for order in maker_orders.iter_mut() {
+        if remaining_volume == 0 {
+            break;
+        }
+
+        let is_better_than_clearing = match auction_type {
+            AuctionType::Bid => order.price > price,
+            AuctionType::Ask => order.price < price,
+        };
+
+        if is_better_than_clearing {
+            let available = order.quantity - order.filled_quantity;
+            let fill_amount = available.min(remaining_volume);
             order.filled_quantity += fill_amount;
             remaining_volume -= fill_amount;
         }
     }
 
-    remaining_volume = calculate_volume_at_price(maker_orders, taker_orders, price, auction_type);
-
-    let mut eligible_maker_volume = 0;
-    for order in maker_orders.iter() {
-        let can_fill = match auction_type {
-            AuctionType::Bid => order.price >= price,
-            AuctionType::Ask => order.price <= price,
-        };
-
-        if can_fill {
-            eligible_maker_volume += order.quantity - order.filled_quantity;
+    if remaining_volume > 0 {
+        let mut at_clearing_volume = 0;
+        for order in maker_orders.iter() {
+            if order.price == price {
+                at_clearing_volume += order.quantity - order.filled_quantity;
+            }
         }
-    }
 
-    if eligible_maker_volume > 0 {
-        for order in maker_orders.iter_mut() {
-            let can_fill = match auction_type {
-                AuctionType::Bid => order.price >= price,
-                AuctionType::Ask => order.price <= price,
-            };
-
-            if can_fill {
-                let available = order.quantity - order.filled_quantity;
-                let fill_amount = (available * remaining_volume) / eligible_maker_volume;
-                order.filled_quantity += fill_amount;
+        if at_clearing_volume > 0 {
+            for order in maker_orders.iter_mut() {
+                if order.price == price {
+                    let available = order.quantity - order.filled_quantity;
+                    let fill_amount = (available * remaining_volume) / at_clearing_volume;
+                    order.filled_quantity += fill_amount;
+                }
             }
         }
     }
