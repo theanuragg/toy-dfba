@@ -163,41 +163,31 @@ fn execute_trades_at_price(
         remaining_volume -= volume_to_fill;
     }
 
-    remaining_volume = total_volume;
-
-    for order in maker_orders.iter_mut() {
-        if remaining_volume == 0 {
-            break;
-        }
-
-        let is_better_than_clearing = match auction_type {
-            AuctionType::Bid => order.price > price,
-            AuctionType::Ask => order.price < price,
+    // Calculate total maker volume eligible at clearing price
+    let mut maker_volume_at_clearing = 0;
+    for order in maker_orders.iter() {
+        let is_eligible = match auction_type {
+            AuctionType::Bid => order.price >= price,
+            AuctionType::Ask => order.price <= price,
         };
 
-        if is_better_than_clearing {
-            let available = order.quantity - order.filled_quantity;
-            let fill_amount = available.min(remaining_volume);
-            order.filled_quantity += fill_amount;
-            remaining_volume -= fill_amount;
+        if is_eligible {
+            maker_volume_at_clearing += order.quantity - order.filled_quantity;
         }
     }
+    if maker_volume_at_clearing > 0 {
+        let maker_fill_volume = total_volume - (total_volume - remaining_volume);
 
-    if remaining_volume > 0 {
-        let mut at_clearing_volume = 0;
-        for order in maker_orders.iter() {
-            if order.price == price {
-                at_clearing_volume += order.quantity - order.filled_quantity;
-            }
-        }
+        for order in maker_orders.iter_mut() {
+            let is_eligible = match auction_type {
+                AuctionType::Bid => order.price >= price,
+                AuctionType::Ask => order.price <= price,
+            };
 
-        if at_clearing_volume > 0 {
-            for order in maker_orders.iter_mut() {
-                if order.price == price {
-                    let available = order.quantity - order.filled_quantity;
-                    let fill_amount = (available * remaining_volume) / at_clearing_volume;
-                    order.filled_quantity += fill_amount;
-                }
+            if is_eligible {
+                let available = order.quantity - order.filled_quantity;
+                let fill_amount = (available * maker_fill_volume) / maker_volume_at_clearing;
+                order.filled_quantity += fill_amount;
             }
         }
     }
