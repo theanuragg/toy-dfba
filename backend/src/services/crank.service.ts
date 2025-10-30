@@ -34,11 +34,9 @@ export class CrankService {
                 this.solanaService.auctionStatePDA
             );
 
-            const currentSlot = await this.solanaService.connection.getSlot();
+            const nextBatchId = auctionState.batchCounter.toNumber() + 1;
 
-            if (currentSlot >= auctionState.lastBatchSlot.toNumber() + auctionState.batchInterval.toNumber()) {
-                const nextBatchId = auctionState.batchCounter.toNumber() + 1;
-
+            try {
                 const tx = await this.solanaService.program.methods
                     .executeBatch(new BN(nextBatchId))
                     .accounts({
@@ -64,6 +62,14 @@ export class CrankService {
                     bidVolume: result.bidVolume.toNumber(),
                     askVolume: result.askVolume.toNumber()
                 });
+            } catch (err: any) {
+                // TooEarlyToExecute error (6000) is expected when batch interval hasn't elapsed
+                if (err?.error?.errorCode?.code === 'TooEarlyToExecute') {
+                    // Silently ignore - this is normal when checking too frequently
+                    console.log('Got TooEarlyToExecute');
+                    return;
+                }
+                throw err;
             }
         }
         catch(err) {
