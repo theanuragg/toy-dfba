@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 
 pub mod errors;
 pub mod instructions;
+pub mod processor;
 pub mod state;
 
 use instructions::*;
@@ -22,5 +23,9 @@ pub mod toy_dfba {
 
     pub fn cancel_all_orders(ctx: Context<CancelAllOrders>) -> Result<()> {
         instructions::cancel_all_orders::cancel_orders_handler(ctx)
+    }
+
+    pub fn execute_batch(ctx: Context<ExecuteBatch>) -> Result<()> {
+        instructions::execute_batch::execute_batch_handler(ctx)
     }
 }

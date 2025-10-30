@@ -26,6 +26,7 @@ pub struct Order {
     pub quantity: u64,
     pub timestamp: i64,
     pub is_active: bool,
+    pub filled_quantity: u64,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]

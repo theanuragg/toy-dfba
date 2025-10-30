@@ -73,6 +73,7 @@ pub fn place_order_handler(ctx: Context<PlaceOrder>, params: PlaceOrderParams) -
         quantity: params.quantity,
         timestamp: Clock::get()?.unix_timestamp,
         is_active: true,
+        filled_quantity: 0,
     };
 
     order_queue.orders.push(order.clone());
