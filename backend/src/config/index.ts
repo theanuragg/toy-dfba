@@ -12,8 +12,8 @@ const loadKeypair = (path: string): Keypair => {
 export const config = {
     port: process.env.PORT || 3001,
     rpcUrl: process.env.RPC_URL || `https://api.devnet.solana.com`,
-    programId: process.env.PROGRAM_ID || '',
-    makerKeypair: loadKeypair(process.env.MAKER_KEYPAIR_PATH || './maker-keypair.json'),
-    crankKeypair: loadKeypair(process.env.CRANK_KEYPAIR_PATH || './crank-keypair.json'),
-    batchInterval: 400,
+    programId: process.env.PROGRAM_ID || '9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf',
+    makerKeypair: loadKeypair(process.env.MAKER_KEYPAIR_PATH || './src/config/maker-keypair.json'),
+    crankKeypair: loadKeypair(process.env.CRANK_KEYPAIR_PATH || './src/config/crank-keypair.json'),
+    batchInterval: 3000,
 }

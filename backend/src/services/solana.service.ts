@@ -1,7 +1,9 @@
 import { Connection, PublicKey } from '@solana/web3.js';
 import { Program, AnchorProvider, Wallet, BN } from '@coral-xyz/anchor';
 import { config } from '../config';
-import idl from '../../../target/idl/toy_dfba.json';
+import type { ToyDfba } from '../types/toy_dfba';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export class SolanaService {
     connection: Connection;
@@ -18,12 +20,16 @@ export class SolanaService {
     async initialize() {
         const wallet = new Wallet(config.makerKeypair);
         this.provider = new AnchorProvider(this.connection, wallet, {
-            commitment: 'confirmed',
+            commitment: 'processed',
+            skipPreflight: true
         });
-        
+
+        const idlPath = path.join(__dirname, '../idl/toy_dfba.json');
+        const idlData = JSON.parse(fs.readFileSync(idlPath, 'utf8'));
+
         this.program = new Program(
-            idl as any,
-            new PublicKey(config.programId),
+            //@ts-ignore
+            idlData as ToyDfba,
             this.provider
         ) as any;
 
