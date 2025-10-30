@@ -3,6 +3,7 @@ import { Program } from "@coral-xyz/anchor";
 import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";
 import dotenv from 'dotenv';
 import IDL from '../target/idl/toy_dfba.json';
+import type { ToyDfba } from '../target/types/toy_dfba';
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ async function main() {
     anchor.setProvider(provider);
 
     const programId = new PublicKey("9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf");
-    const program = new Program(IDL as any, programId, provider);
+    const program = new Program(IDL as ToyDfba, provider);
 
     const [auctionStatePDA] = PublicKey.findProgramAddressSync(
         [Buffer.from("auction_state")],
@@ -31,7 +32,7 @@ async function main() {
     console.log("Initializing auction...");
 
     try {
-        const auctionState = await program.account.auctionState.fetchNullable(auctionStatePDA);
+        const auctionState = await (program.account as any).auctionState.fetchNullable(auctionStatePDA);
         if (auctionState) {
             console.log("Auction already initialized");
             return;

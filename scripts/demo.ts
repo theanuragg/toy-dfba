@@ -2,6 +2,8 @@ import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";
 import dotenv from 'dotenv';
+import IDL from '../target/idl/toy_dfba.json';
+import type { ToyDfba } from '../target/types/toy_dfba';
 
 dotenv.config();
 
@@ -9,7 +11,8 @@ async function main() {
     const provider = anchor.AnchorProvider.env();
     anchor.setProvider(provider);
 
-    const program = anchor.workspace.ToyDfba as Program<any>;
+    const programId = new PublicKey("9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf");
+    const program = new Program(IDL as ToyDfba, provider);
 
     const [auctionStatePDA] = PublicKey.findProgramAddressSync(
         [Buffer.from("auction_state")],
@@ -61,7 +64,7 @@ async function main() {
 
     console.log("\nExecuting batch auction...");
     
-    const auctionState = await program.account.auctionState.fetch(auctionStatePDA);
+    const auctionState = await (program.account as any).auctionState.fetchNullable(auctionStatePDA);
     //@ts-ignore
     const batchId = auctionState.batchCounter.toNumber() + 1;
 
@@ -83,7 +86,7 @@ async function main() {
 
         console.log("Batch executed:", tx);
 
-        const result = await program.account.auctionResult.fetch(
+        const result = await (program.account as any).auctionResult.fetchNullable(
             PublicKey.findProgramAddressSync(
                 [Buffer.from("result"), Buffer.from(new anchor.BN(batchId).toArray("le", 8))],
                 program.programId

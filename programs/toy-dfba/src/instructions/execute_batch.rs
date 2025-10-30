@@ -3,7 +3,7 @@ use crate::processor::auction::execute_auction;
 use crate::state::*;
 use anchor_lang::prelude::*;
 
-pub fn execute_batch_handler(ctx: Context<ExecuteBatch>) -> Result<()> {
+pub fn execute_batch_handler(ctx: Context<ExecuteBatch>, _batch_id: u64) -> Result<()> {
     let auction_state = &mut ctx.accounts.auction_state;
     let bid_queue = &mut ctx.accounts.bid_queue;
     let ask_queue = &mut ctx.accounts.ask_queue;

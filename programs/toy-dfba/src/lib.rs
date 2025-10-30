@@ -25,7 +25,7 @@ pub mod toy_dfba {
         instructions::cancel_all_orders::cancel_orders_handler(ctx)
     }
 
-    pub fn execute_batch(ctx: Context<ExecuteBatch>) -> Result<()> {
-        instructions::execute_batch::execute_batch_handler(ctx)
+    pub fn execute_batch(ctx: Context<ExecuteBatch>, batch_id: u64) -> Result<()> {
+        instructions::execute_batch::execute_batch_handler(ctx, batch_id)
     }
 }

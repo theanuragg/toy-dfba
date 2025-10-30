@@ -13,7 +13,7 @@
     "demo": "ts-node scripts/demo.ts"
   },
   "devDependencies": {
-    "@coral-xyz/anchor": "^0.29.0",
+    "@coral-xyz/anchor": "^0.32.0",
     "@solana/web3.js": "^1.87.6",
     "@types/bn.js": "^5.1.0",
     "@types/mocha": "^10.0.0",

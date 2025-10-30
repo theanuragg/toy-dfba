@@ -12,12 +12,12 @@ pub fn initialize_handler(ctx: Context<Initialize>, batch_interval: u64) -> Resu
     let bid_queue = &mut ctx.accounts.bid_queue;
     bid_queue.auction_type = AuctionType::Bid;
     bid_queue.orders = Vec::new();
-    bid_queue.max_orders = 100;
+    bid_queue.max_orders = 85;
 
     let ask_queue = &mut ctx.accounts.ask_queue;
     ask_queue.auction_type = AuctionType::Ask;
     ask_queue.orders = Vec::new();
-    ask_queue.max_orders = 100;
+    ask_queue.max_orders = 85;
 
     Ok(())
 }
@@ -36,7 +36,7 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 1 + 4 + 4 +(100 * 120),
+        space = 8 + 1 + 4 + 4 + (85 * 120),
         seeds = [b"bid_queue"],
         bump
     )]
@@ -45,7 +45,7 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = authority,
-        space = 8 + 1 + 4 + 4 + (100 * 120),
+        space = 8 + 1 + 4 + 4 + (85 * 120),
         seeds = [b"ask_queue"],
         bump
     )]
