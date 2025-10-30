@@ -19,4 +19,8 @@ pub mod toy_dfba {
     pub fn place_order(ctx: Context<PlaceOrder>, params: PlaceOrderParams) -> Result<()> {
         instructions::place_order::place_order_handler(ctx, params)
     }
+
+    pub fn cancel_all_orders(ctx: Context<CancelAllOrders>) -> Result<()> {
+        instructions::cancel_all_orders::cancel_orders_handler(ctx)
+    }
 }
