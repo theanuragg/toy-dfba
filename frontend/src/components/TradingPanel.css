@@ -1,0 +1,98 @@
+/* frontend/src/components/TradingPanel.css */
+.trading-panel {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.trading-panel h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+}
+
+.wallet-section {
+    margin-bottom: 20px;
+}
+
+.order-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.order-type-selector button {
+    flex: 1;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.order-type-selector button:hover {
+    background-color: #3a3a3a;
+}
+
+.order-type-selector button.active {
+    background-color: #4a4aff;
+    border-color: #6a6aff;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: white;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #6a6aff;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4a4aff;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #6a6aff;
+}
+
+.submit-button:disabled {
+    background-color: #333;
+    cursor: not-allowed;
+}
+
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}

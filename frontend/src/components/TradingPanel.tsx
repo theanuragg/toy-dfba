@@ -4,7 +4,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { Program, AnchorProvider, BN } from '@coral-xyz/anchor';
 import { PublicKey, SystemProgram } from '@solana/web3.js';
-import idl from '../../../target/idl/toy_dfba.json';
+import idl from '../idl.json';
 import './TradingPanel.css';
 
 const PROGRAM_ID = new PublicKey('9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf');
@@ -34,7 +34,7 @@ export const TradingPanel: React.FC = () => {
                 { commitment: 'confirmed' }
             );
 
-            const program = new Program(idl as any, PROGRAM_ID, provider);
+            const program = new Program(idl as any, provider);
 
             // Derive PDAs
             const [auctionStatePDA] = PublicKey.findProgramAddressSync(
