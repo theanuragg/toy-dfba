@@ -1,13 +1,12 @@
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
-import { Program, AnchorProvider, Wallet, Idl, BN } from "@coral-xyz/anchor";
+import { Connection, PublicKey } from '@solana/web3.js';
+import { Program, AnchorProvider, Wallet, BN } from '@coral-xyz/anchor';
 import { config } from '../config';
 import idl from '../../../target/idl/toy_dfba.json';
 
 export class SolanaService {
     connection: Connection;
     provider: AnchorProvider;
-    program: Program;
-
+    program: any;
     auctionStatePDA: PublicKey;
     bidQueuePDA: PublicKey;
     askQueuePDA: PublicKey;
@@ -23,11 +22,10 @@ export class SolanaService {
         });
         
         this.program = new Program(
-            //@ts-ignore
-            idl as Idl,
+            idl as any,
             new PublicKey(config.programId),
             this.provider
-        );
+        ) as any;
 
         [this.auctionStatePDA] = PublicKey.findProgramAddressSync(
             [Buffer.from('auction_state')],
