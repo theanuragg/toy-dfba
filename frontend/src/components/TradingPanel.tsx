@@ -7,7 +7,7 @@ import { PublicKey, SystemProgram } from '@solana/web3.js';
 import idl from '../idl.json';
 import './TradingPanel.css';
 
-const PROGRAM_ID = new PublicKey('9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf');
+const PROGRAM_ID = new PublicKey('EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ');
 
 export const TradingPanel: React.FC = () => {
     const { connection } = useConnection();
