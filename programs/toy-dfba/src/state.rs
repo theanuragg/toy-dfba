@@ -30,8 +30,8 @@ pub struct Order {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub enum AuctionType {
-    Bid,    // Maker buys + Taker sells
-    Ask,    // Maker sells + Taker buys
+    Bid, // Maker buys + Taker sells
+    Ask, // Maker sells + Taker buys
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]

@@ -1,6 +1,10 @@
 use anchor_lang::prelude::*;
 
+pub mod errors;
+pub mod instructions;
 pub mod state;
+
+use instructions::*;
 
 declare_id!("HjNP38ofCxokbhd1bEJcXtB2Z7397B5JDLNWB9UESRvz");
 
@@ -8,11 +12,7 @@ declare_id!("HjNP38ofCxokbhd1bEJcXtB2Z7397B5JDLNWB9UESRvz");
 pub mod toy_dfba {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
-        Ok(())
+    pub fn initialize(ctx: Context<Initialize>, batch_interval: u64) -> Result<()> {
+        instructions::initialize::handler(ctx, batch_interval)
     }
 }
-
-#[derive(Accounts)]
-pub struct Initialize {}
