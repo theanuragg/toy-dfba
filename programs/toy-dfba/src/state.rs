@@ -55,3 +55,22 @@ pub struct AuctionResult {
     pub ask_volume: u64,
     pub timestamp: i64,
 }
+
+#[event]
+pub struct OrderPlacedEvent {
+    pub order_id: u64,
+    pub owner: Pubkey,
+    pub order_type: OrderType,
+    pub side: Side,
+    pub price: u64,
+    pub quantity: u64,
+}
+
+#[event]
+pub struct BatchExecutedEvent {
+    pub batch_id: u64,
+    pub bid_clearing_price: u64,
+    pub bid_volume: u64,
+    pub ask_clearing_price: u64,
+    pub ask_volume: u64,
+}

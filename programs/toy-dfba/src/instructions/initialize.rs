@@ -1,7 +1,7 @@
 use crate::state::*;
 use anchor_lang::prelude::*;
 
-pub fn handler(ctx: Context<Initialize>, batch_interval: u64) -> Result<()> {
+pub fn initialize_handler(ctx: Context<Initialize>, batch_interval: u64) -> Result<()> {
     let auction_state = &mut ctx.accounts.auction_state;
     auction_state.authority = *ctx.accounts.authority.key;
     auction_state.batch_interval = batch_interval;
