@@ -1,6 +1,6 @@
 use crate::errors::ErrorCode;
-use crate::state::*;
 use crate::instructions::place_order::PlaceOrderParams;
+use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
