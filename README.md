@@ -24,9 +24,10 @@ A Dual Flow Batch Auction (DFBA) is a trading mechanism that processes orders in
 
 - **Two Separate Auctions**: Independent bid and ask auctions that clear simultaneously
 - **Maker/Taker Orders**: Distinguishes between market makers (liquidity providers) and takers
-- **Time-Based Batching**: Orders accumulate during a batch interval and execute atomically
+- **Time-Based Batching**: Orders accumulate during a batch interval and execute atomically (every 100ms)
 - **Uniform Clearing Price**: All matched orders execute at the same clearing price within each auction
 - **MEV Resistance**: Batch processing reduces front-running opportunities compared to continuous order books
+- **Ephemeral Rollups Integration**: Leverages ephemeral rollups for high-frequency batch execution with delegation support
 
 ### Bid vs Ask Auctions
 
@@ -65,7 +66,7 @@ A Dual Flow Batch Auction (DFBA) is a trading mechanism that processes orders in
 │  │   orders (10)    │   │ • Executes batch │   │ • WebSocket  │  │
 │  │ • Cancels old    │   │   every interval │   │ • Real-time  │  │
 │  │   orders         │   │ • Fetches results│   │   updates    │  │
-│  │ • Every 3000ms   │   │ • Every 3000ms   │   │              │  │
+│  │ • Every 100ms    │   │ • Every 100ms    │   │              │  │
 │  └──────────────────┘   └──────────────────┘   └──────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
                               │
@@ -89,7 +90,7 @@ A Dual Flow Batch Auction (DFBA) is a trading mechanism that processes orders in
 1. ORDER PLACEMENT
    User/Maker → Frontend → Program → Bid/Ask Queue
 
-2. BATCH EXECUTION (Every 3 seconds)
+2. BATCH EXECUTION (Every 100ms)
    Crank Service → execute_batch() → Auction Algorithm → Clear both auctions
 
 3. AUCTION CLEARING
@@ -211,7 +212,7 @@ place_order(order_type, side, price, quantity)
 The `MakerService` continuously provides liquidity:
 
 ```typescript
-// Every 3 seconds (batchInterval):
+// Every 100ms (batchInterval):
 1. Cancel all existing maker orders
 2. Calculate new mid-price (base ± random variation)
 3. Post 5 buy orders at spread levels below mid
@@ -222,7 +223,7 @@ The `MakerService` continuously provides liquidity:
 ### 4. Batch Execution (The Crank)
 
 ```typescript
-// CrankService checks every 3 seconds:
+// CrankService checks every 100ms:
 if (currentSlot >= lastBatchSlot + batchInterval) {
     execute_batch(nextBatchId)
 }
@@ -391,7 +392,7 @@ RPC_URL=https://api.devnet.solana.com
 Update `backend/src/config/index.ts` if needed:
 
 ```typescript
-batchInterval: 3000  // 3 seconds (3000ms = ~750 slots @ 400ms/slot)
+batchInterval: 100  // 100ms for high-frequency execution
 ```
 
 ## Usage
@@ -474,10 +475,10 @@ Frontend: Input/display ÷ 1e6
 Solana slots (~400ms each) are used for scheduling:
 ```
 batch_interval = 7500 slots ≈ 50 minutes
-batchInterval = 3000ms ≈ 7.5 slots
+batchInterval = 100ms ≈ 0.25 slots
 ```
 
-For this demo, backend uses **time-based intervals** (3000ms) and checks slot progression.
+For this demo, backend uses **time-based intervals** (100ms) and checks slot progression.
 
 ### Batch Interval Configuration
 
@@ -490,7 +491,7 @@ initialize(ctx, batch_interval: 7500)  // ~50 min on mainnet
 Backend services use a separate time-based interval:
 ```typescript
 // backend/src/config/index.ts
-batchInterval: 3000  // 3 seconds in milliseconds
+batchInterval: 100  // 100ms for high-frequency execution
 ```
 
 ### Order Routing Logic
@@ -541,7 +542,7 @@ Located in `backend/src/config/index.ts`:
   port: 3001,                                      // API server port
   rpcUrl: "https://api.devnet.solana.com",        // Solana RPC endpoint
   programId: "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d",
-  batchInterval: 3000,                            // 3 seconds between batches
+  batchInterval: 100,                             // 100ms between batches
 }
 ```
 
@@ -557,4 +558,4 @@ Market maker posts:
 - 5 buy orders: `[99.5, 99.3, 99.1, 98.9, 98.7]` (example with spread levels)
 - 5 sell orders: `[100.5, 100.7, 100.9, 101.1, 101.3]`
 - Quantities: Random between 100-500 units
-- Refresh: Every batch interval (3 seconds)
+- Refresh: Every batch interval (100ms)
