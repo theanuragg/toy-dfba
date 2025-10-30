@@ -11,7 +11,7 @@ const loadKeypair = (path: string): Keypair => {
 
 export const config = {
     port: process.env.PORT || 3001,
-    rpcUrl: process.env.RPC_URL || `https://api.devnet.solana.com`,
+    rpcUrl: process.env.RPC_URL || `https://devnet.helius-rpc.com/?api-key=a62c485c-9d4a-4161-8afc-7b7235875aaa`,
     programId: process.env.PROGRAM_ID || 'EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ',
     makerKeypair: loadKeypair(process.env.MAKER_KEYPAIR_PATH || './src/config/maker-keypair.json'),
     crankKeypair: loadKeypair(process.env.CRANK_KEYPAIR_PATH || './src/config/crank-keypair.json'),
