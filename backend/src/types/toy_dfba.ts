@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/toy_dfba.json`.
  */
 export type ToyDfba = {
-  "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ",
+  "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d",
   "metadata": {
     "name": "toyDfba",
     "version": "0.1.0",
@@ -232,7 +232,7 @@ export type ToyDfba = {
         },
         {
           "name": "ownerProgram",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegationProgram",
@@ -399,7 +399,7 @@ export type ToyDfba = {
         },
         {
           "name": "ownerProgram",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegationProgram",
@@ -566,7 +566,7 @@ export type ToyDfba = {
         },
         {
           "name": "ownerProgram",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegationProgram",

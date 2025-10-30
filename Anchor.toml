@@ -6,13 +6,13 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-toy_dfba = "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+toy_dfba = "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "https://devnet-router.magicblock.app/"
+cluster = "devnet"
 wallet = "~/.config/solana/mainnet.json"
 
 [scripts]

@@ -11,7 +11,7 @@ async function main() {
     const provider = anchor.AnchorProvider.env();
     anchor.setProvider(provider);
 
-    const programId = new PublicKey("EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ");
+    const programId = new PublicKey("2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d");
     const program = new Program(IDL as ToyDfba, provider);
 
     const [auctionStatePDA] = PublicKey.findProgramAddressSync(

@@ -1,5 +1,5 @@
 {
-  "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ",
+  "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d",
   "metadata": {
     "name": "toy_dfba",
     "version": "0.1.0",
@@ -226,7 +226,7 @@
         },
         {
           "name": "owner_program",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegation_program",
@@ -393,7 +393,7 @@
         },
         {
           "name": "owner_program",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegation_program",
@@ -560,7 +560,7 @@
         },
         {
           "name": "owner_program",
-          "address": "EPdAPPMBEkvT5gmSLirTJabgZ1kPEvXYzhspBwVN4ofJ"
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
         },
         {
           "name": "delegation_program",
