@@ -12,7 +12,7 @@ import './App.css';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
 function App() {
-    const endpoint = clusterApiUrl('devnet');
+    const endpoint = "https://devnet-router.magicblock.app/";
     const wallets = [new PhantomWalletAdapter()];
 
     return (

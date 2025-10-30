@@ -10,7 +10,8 @@
     "start:frontend": "cd frontend && npm start",
     "start:all": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "init": "ts-node scripts/initialize.ts",
-    "demo": "ts-node scripts/demo.ts"
+    "demo": "ts-node scripts/demo.ts",
+    "delegate": "ts-node scripts/delegate.ts"
   },
   "devDependencies": {
     "@coral-xyz/anchor": "^0.32.0",
