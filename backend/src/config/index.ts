@@ -16,5 +16,5 @@ export const config = {
     makerKeypair: loadKeypair(process.env.MAKER_KEYPAIR_PATH || './src/config/maker-keypair.json'),
     takerKeypair: loadKeypair(process.env.TAKER_KEYPAIR_PATH || './src/config/taker-keypair.json'),
     crankKeypair: loadKeypair(process.env.CRANK_KEYPAIR_PATH || './src/config/crank-keypair.json'),
-    batchInterval: 100,
+    batchInterval: 1000,
 }

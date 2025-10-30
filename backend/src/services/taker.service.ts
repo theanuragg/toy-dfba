@@ -79,7 +79,6 @@ export class TakerService {
             return tx;
         } catch (error) {
             console.error('Failed to place taker orders:', error);
-            throw error;
         }
     }
 }

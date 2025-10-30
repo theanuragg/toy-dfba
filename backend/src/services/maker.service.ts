@@ -13,8 +13,6 @@ export class MakerService {
     async start() {
         console.log('Starting maker service...');
 
-        await this.postNewOrders();
-
         this.intervalId = setInterval(async () => {
             try {
                 await this.cancelAllAndPostNewOrders();
@@ -57,7 +55,7 @@ export class MakerService {
 
         const orders = [];
 
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 5; i++) {
             const buyPrice = currentMid * (1 - this.spread * (1 + i * 0.15));
             const buyQuantity = 1000 + Math.floor(Math.random() * 2000);
             orders.push({
@@ -68,7 +66,7 @@ export class MakerService {
             });
         }
 
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 5; i++) {
             const sellPrice = currentMid * (1 + this.spread * (1 + i * 0.15));
             const sellQuantity = 1000 + Math.floor(Math.random() * 2000);
             orders.push({
