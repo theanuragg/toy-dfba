@@ -24,17 +24,8 @@ pub struct CancelAllOrders<'info> {
 pub fn cancel_orders_handler(ctx: Context<CancelAllOrders>) -> Result<()> {
     let owner = *ctx.accounts.owner.key;
 
-    for order in ctx.accounts.bid_queue.orders.iter_mut() {
-        if order.owner == owner {
-            order.is_active = false;
-        }
-    }
-
-    for order in ctx.accounts.ask_queue.orders.iter_mut() {
-        if order.owner == owner {
-            order.is_active = false;
-        }
-    }
+    ctx.accounts.bid_queue.orders.retain(|order| order.owner != owner);
+    ctx.accounts.ask_queue.orders.retain(|order| order.owner != owner);
 
     Ok(())
 }

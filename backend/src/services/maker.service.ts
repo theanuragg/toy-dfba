@@ -17,8 +17,7 @@ export class MakerService {
 
         this.intervalId = setInterval(async () => {
             try {
-                await this.cancelAllOrders();
-                await this.postNewOrders();
+                await this.cancelAllAndPostNewOrders();
             }
             catch(err) {
                 console.error('Maker service error: ', err);
@@ -49,6 +48,54 @@ export class MakerService {
         }
         catch(err) {
             console.error('Failed to cancel orders: ', err);
+        }
+    }
+
+    private async cancelAllAndPostNewOrders() {
+        const priceVariation = (Math.random() - 0.5) * 0.02;
+        const currentMid = this.basePrice * (1 + priceVariation);
+
+        const orders = [];
+
+        for (let i = 0; i < 15; i++) {
+            const buyPrice = currentMid * (1 - this.spread * (1 + i * 0.15));
+            const buyQuantity = 1000 + Math.floor(Math.random() * 2000);
+            orders.push({
+                orderType: { maker: {} },
+                side: { buy: {} },
+                price: new BN(Math.floor(buyPrice * 1e6)),
+                quantity: new BN(buyQuantity),
+            });
+        }
+
+        for (let i = 0; i < 15; i++) {
+            const sellPrice = currentMid * (1 + this.spread * (1 + i * 0.15));
+            const sellQuantity = 1000 + Math.floor(Math.random() * 2000);
+            orders.push({
+                orderType: { maker: {} },
+                side: { sell: {} },
+                price: new BN(Math.floor(sellPrice * 1e6)),
+                quantity: new BN(sellQuantity),
+            });
+        }
+
+        try {
+            const tx = await this.solanaService.program.methods
+                .cancelAllAndPostNewOrders(orders)
+                .accounts({
+                    orderPlacer: config.makerKeypair.publicKey,
+                    auctionState: this.solanaService.auctionStatePDA,
+                    bidQueue: this.solanaService.bidQueuePDA,
+                    askQueue: this.solanaService.askQueuePDA,
+                })
+                .signers([config.makerKeypair])
+                .rpc();
+
+            console.log(`Cancelled all orders and posted ${orders.length} new maker orders: ${tx}`);
+            return tx;
+        } catch (error) {
+            console.error('Failed to cancel and post orders:', error);
+            throw error;
         }
     }
 

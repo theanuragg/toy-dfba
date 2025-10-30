@@ -35,6 +35,13 @@ pub mod toy_dfba {
         instructions::cancel_all_orders::cancel_orders_handler(ctx)
     }
 
+    pub fn cancel_all_and_post_new_orders(
+        ctx: Context<CancelAllAndPostNewOrders>,
+        orders: Vec<PlaceOrderParams>,
+    ) -> Result<()> {
+        instructions::cancel_all_and_post_new_orders::cancel_all_and_post_new_orders_handler(ctx, orders)
+    }
+
     pub fn execute_batch(ctx: Context<ExecuteBatch>, batch_id: u64) -> Result<()> {
         instructions::execute_batch::execute_batch_handler(ctx, batch_id)
     }
