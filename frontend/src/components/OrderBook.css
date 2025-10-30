@@ -1,0 +1,52 @@
+/* frontend/src/components/OrderBook.css */
+.order-book {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-book h2 {
+    margin: 0 0 20px 0;
+    font-size: 1.5rem;
+}
+
+.order-book h3 {
+    margin: 10px 0;
+    font-size: 1rem;
+    color: #888;
+}
+
+.order-book-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    font-weight: bold;
+    color: #888;
+}
+
+.order-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 8px 10px;
+    transition: background-color 0.2s;
+}
+
+.order-row:hover {
+    background-color: #2a2a2a;
+}
+
+.order-row.ask .price {
+    color: #ff4444;
+}
+
+.order-row.bid .price {
+    color: #44ff44;
+}
+
+.spread-divider {
+    height: 20px;
+    border-top: 2px solid #333;
+    margin: 10px 0;
+}
