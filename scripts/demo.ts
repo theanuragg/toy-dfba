@@ -31,35 +31,80 @@ async function main() {
 
     console.log("Running demo...");
 
-    const orders = [
-        { orderType: { maker: {} }, side: { buy: {} }, price: 99000000, quantity: 200 },
-        { orderType: { maker: {} }, side: { sell: {} }, price: 101000000, quantity: 200 },
-        { orderType: { taker: {} }, side: { buy: {} }, price: 102000000, quantity: 150 },
-        { orderType: { taker: {} }, side: { sell: {} }, price: 98000000, quantity: 150 },
+    // Create 10 maker orders (5 buys, 5 sells)
+    const makerOrders = [];
+    const basePrice = 100000000; // $100
+
+    for (let i = 0; i < 5; i++) {
+        makerOrders.push({
+            orderType: { maker: {} },
+            side: { buy: {} },
+            price: new anchor.BN(basePrice - (i + 1) * 1000000), // Decreasing buy prices
+            quantity: new anchor.BN(100 + i * 50),
+        });
+    }
+
+    for (let i = 0; i < 5; i++) {
+        makerOrders.push({
+            orderType: { maker: {} },
+            side: { sell: {} },
+            price: new anchor.BN(basePrice + (i + 1) * 1000000), // Increasing sell prices
+            quantity: new anchor.BN(100 + i * 50),
+        });
+    }
+
+    // Create 2-3 taker orders
+    const takerOrders = [
+        {
+            orderType: { taker: {} },
+            side: { buy: {} },
+            price: new anchor.BN(102000000),
+            quantity: new anchor.BN(150),
+        },
+        {
+            orderType: { taker: {} },
+            side: { sell: {} },
+            price: new anchor.BN(98000000),
+            quantity: new anchor.BN(150),
+        },
+        {
+            orderType: { taker: {} },
+            side: { buy: {} },
+            price: new anchor.BN(103000000),
+            quantity: new anchor.BN(100),
+        },
     ];
 
-    for (const order of orders) {
-        try {
-            const tx = await program.methods
-                .placeOrder({
-                    orderType: order.orderType,
-                    side: order.side,
-                    price: new anchor.BN(order.price),
-                    quantity: new anchor.BN(order.quantity),
-                })
-                .accounts({
-                    orderPlacer: provider.wallet.publicKey,
-                    auctionState: auctionStatePDA,
-                    bidQueue: bidQueuePDA,
-                    askQueue: askQueuePDA,
-                    systemProgram: SystemProgram.programId,
-                })
-                .rpc();
+    try {
+        console.log(`Placing ${makerOrders.length} maker orders...`);
+        const makerTx = await program.methods
+            .placeMultipleOrders(makerOrders)
+            .accounts({
+                orderPlacer: provider.wallet.publicKey,
+                auctionState: auctionStatePDA,
+                bidQueue: bidQueuePDA,
+                askQueue: askQueuePDA,
+                systemProgram: SystemProgram.programId,
+            })
+            .rpc();
 
-            console.log(`Placed ${JSON.stringify(order.orderType)} ${JSON.stringify(order.side)} order @ ${order.price / 1e6}`);
-        } catch (error) {
-            console.error("Error placing order:", error);
-        }
+        console.log(`Placed ${makerOrders.length} maker orders: ${makerTx}`);
+
+        console.log(`\nPlacing ${takerOrders.length} taker orders...`);
+        const takerTx = await program.methods
+            .placeMultipleOrders(takerOrders)
+            .accounts({
+                orderPlacer: provider.wallet.publicKey,
+                auctionState: auctionStatePDA,
+                bidQueue: bidQueuePDA,
+                askQueue: askQueuePDA,
+                systemProgram: SystemProgram.programId,
+            })
+            .rpc();
+
+        console.log(`Placed ${takerOrders.length} taker orders: ${takerTx}`);
+    } catch (error) {
+        console.error("Error placing orders:", error);
     }
 
     console.log("\nExecuting batch auction...");

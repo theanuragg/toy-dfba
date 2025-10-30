@@ -56,38 +56,34 @@ export class MakerService {
         const priceVariation = (Math.random() - 0.5) * 0.02;
         const currentMid = this.basePrice * (1 + priceVariation);
 
-        const buyPrice = currentMid * (1 - this.spread * Math.random());
-        const buyQuantity = 100 + Math.floor(Math.random() * 900);
+        const orders = [];
 
-        await this.postOrder({
-            orderType: OrderType.Maker,
-            side: Side.Buy,
-            price: new BN(Math.floor(buyPrice * 1e6)),
-            quantity: new BN(buyQuantity),
-        });
+        // Create 10 maker orders (5 buys, 5 sells)
+        for (let i = 0; i < 5; i++) {
+            const buyPrice = currentMid * (1 - this.spread * (1 + i * 0.2));
+            const buyQuantity = 100 + Math.floor(Math.random() * 400);
+            orders.push({
+                orderType: { maker: {} },
+                side: { buy: {} },
+                price: new BN(Math.floor(buyPrice * 1e6)),
+                quantity: new BN(buyQuantity),
+            });
+        }
 
-        const sellPrice = currentMid * (1 + this.spread * Math.random());
-        const sellQuantity = 100 + Math.floor(Math.random() * 900);
-        
-        await this.postOrder({
-            orderType: OrderType.Maker,
-            side: Side.Sell,
-            price: new BN(Math.floor(sellPrice * 1e6)),
-            quantity: new BN(sellQuantity),
-        });
+        for (let i = 0; i < 5; i++) {
+            const sellPrice = currentMid * (1 + this.spread * (1 + i * 0.2));
+            const sellQuantity = 100 + Math.floor(Math.random() * 400);
+            orders.push({
+                orderType: { maker: {} },
+                side: { sell: {} },
+                price: new BN(Math.floor(sellPrice * 1e6)),
+                quantity: new BN(sellQuantity),
+            });
+        }
 
-        console.log(`Posted maker orders - Buy: ${buyPrice.toFixed(2)} @ ${buyQuantity}, Sell: ${sellPrice.toFixed(2)} @ ${sellQuantity}`);
-    }
-
-    private async postOrder(params: OrderParams) {
         try {
             const tx = await this.solanaService.program.methods
-                .placeOrder({
-                    orderType: { [params.orderType]: {} },
-                    side: { [params.side]: {} },
-                    price: params.price,
-                    quantity: params.quantity,
-                })
+                .placeMultipleOrders(orders)
                 .accounts({
                     orderPlacer: config.makerKeypair.publicKey,
                     auctionState: this.solanaService.auctionStatePDA,
@@ -96,10 +92,11 @@ export class MakerService {
                 })
                 .signers([config.makerKeypair])
                 .rpc();
-            
+
+            console.log(`Posted ${orders.length} maker orders: ${tx}`);
             return tx;
         } catch (error) {
-            console.error('Failed to post order:', error);
+            console.error('Failed to post orders:', error);
             throw error;
         }
     }

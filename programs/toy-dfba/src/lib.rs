@@ -21,6 +21,13 @@ pub mod toy_dfba {
         instructions::place_order::place_order_handler(ctx, params)
     }
 
+    pub fn place_multiple_orders(
+        ctx: Context<PlaceMultipleOrders>,
+        orders: Vec<PlaceOrderParams>,
+    ) -> Result<()> {
+        instructions::place_multiple_orders::place_multiple_orders_handler(ctx, orders)
+    }
+
     pub fn cancel_all_orders(ctx: Context<CancelAllOrders>) -> Result<()> {
         instructions::cancel_all_orders::cancel_orders_handler(ctx)
     }

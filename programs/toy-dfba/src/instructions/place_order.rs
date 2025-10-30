@@ -31,7 +31,7 @@ pub struct PlaceOrder<'info> {
     pub system_program: Program<'info, System>,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct PlaceOrderParams {
     pub order_type: OrderType,
     pub side: Side,
