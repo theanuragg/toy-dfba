@@ -25,6 +25,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "bn.js": "^5.2.1"
+    "bn.js": "^5.2.1",
+    "dotenv": "^17.2.3"
   }
 }

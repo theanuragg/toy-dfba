@@ -17,3 +17,5 @@ wallet = "~/.config/solana/mainnet.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 \"tests/**/*.ts\""
+initialize = "ts-node scripts/initialize.ts"
+demo = "ts-node scripts/demo.ts"

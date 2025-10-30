@@ -1,12 +1,17 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";
+import dotenv from 'dotenv';
+import IDL from '../target/idl/toy_dfba.json';
+
+dotenv.config();
 
 async function main() {
     const provider = anchor.AnchorProvider.env();
     anchor.setProvider(provider);
 
-    const program = anchor.workspace.Dfba as Program<any>;
+    const programId = new PublicKey("9cuBmqXbLefpwP6Kc6ManHz6ZJYszCKoYvPnMvZ7Jcpf");
+    const program = new Program(IDL as any, programId, provider);
 
     const [auctionStatePDA] = PublicKey.findProgramAddressSync(
         [Buffer.from("auction_state")],
