@@ -5,8 +5,11 @@ import { config } from '../config';
 
 export class MakerService {
     private intervalId: NodeJS.Timeout | null = null;
+    private statsIntervalId: NodeJS.Timeout | null = null;
     private basePrice = 100;
     private spread = 0.00005;
+    private txCount = 0;
+    private startTime = Date.now();
 
     constructor(private solanaService: SolanaService) {}
 
@@ -21,12 +24,21 @@ export class MakerService {
                 console.error('Maker service error: ', err);
             }
         }, config.batchInterval);
+        this.statsIntervalId = setInterval(() => {
+            const elapsed = (Date.now() - this.startTime) / 1000;
+            const avgTxPerSecond = (this.txCount / elapsed).toFixed(2);
+            console.log(`[STATS] Cancel & Post TXs: ${this.txCount} total | ${avgTxPerSecond} tx/s average`);
+        }, 1000);
     }
 
     stop() {
         if (this.intervalId) {
             clearInterval(this.intervalId);
             this.intervalId = null;
+        }
+        if (this.statsIntervalId) {
+            clearInterval(this.statsIntervalId);
+            this.statsIntervalId = null;
         }
     }
 
@@ -89,6 +101,7 @@ export class MakerService {
                 .signers([config.makerKeypair])
                 .rpc();
 
+            this.txCount++;
             console.log(`Cancelled all orders and posted ${orders.length} new maker orders: ${tx}`);
             return tx;
         } catch (error) {
