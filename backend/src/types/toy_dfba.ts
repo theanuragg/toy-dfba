@@ -686,6 +686,197 @@ export type ToyDfba = {
       "args": []
     },
     {
+      "name": "delegateResult",
+      "discriminator": [
+        201,
+        198,
+        51,
+        69,
+        241,
+        173,
+        75,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "signer": true
+        },
+        {
+          "name": "bufferPda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  117,
+                  102,
+                  102,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                18,
+                199,
+                174,
+                71,
+                150,
+                69,
+                74,
+                86,
+                214,
+                70,
+                205,
+                206,
+                207,
+                15,
+                43,
+                18,
+                226,
+                89,
+                154,
+                31,
+                103,
+                249,
+                238,
+                212,
+                135,
+                240,
+                227,
+                72,
+                126,
+                27,
+                129,
+                216
+              ]
+            }
+          }
+        },
+        {
+          "name": "delegationRecordPda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  108,
+                  101,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "delegationProgram"
+            }
+          }
+        },
+        {
+          "name": "delegationMetadataPda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  108,
+                  101,
+                  103,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  100,
+                  97,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "pda"
+              }
+            ],
+            "program": {
+              "kind": "account",
+              "path": "delegationProgram"
+            }
+          }
+        },
+        {
+          "name": "pda",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "batchId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "ownerProgram",
+          "address": "2GJwMvS6ewfK8TytLXzonbmbendP3oAsoBA7c4px5e9d"
+        },
+        {
+          "name": "delegationProgram",
+          "address": "DELeGGvXpWV2fqJUhqcF5ZSYMS4JTLjteaAMARRSaeSh"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "batchId",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "executeBatch",
       "discriminator": [
         112,
@@ -795,10 +986,6 @@ export type ToyDfba = {
           "name": "authority",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -904,6 +1091,59 @@ export type ToyDfba = {
       "args": [
         {
           "name": "batchInterval",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initializeResult",
+      "discriminator": [
+        150,
+        212,
+        176,
+        141,
+        183,
+        117,
+        137,
+        138
+      ],
+      "accounts": [
+        {
+          "name": "result",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  115,
+                  117,
+                  108,
+                  116
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "batchId"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "batchId",
           "type": "u64"
         }
       ]

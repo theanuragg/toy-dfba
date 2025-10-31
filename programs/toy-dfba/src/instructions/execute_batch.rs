@@ -72,9 +72,7 @@ pub struct ExecuteBatch<'info> {
     pub ask_queue: Account<'info, OrderQueue>,
 
     #[account(
-        init,
-        payer = authority,
-        space = 8 + 8 + 8 + 8 + 8 + 8 + 8,
+        mut,
         seeds = [b"result", batch_id.to_le_bytes().as_ref()],
         bump
     )]
@@ -82,6 +80,4 @@ pub struct ExecuteBatch<'info> {
 
     #[account(mut)]
     pub authority: Signer<'info>,
-
-    pub system_program: Program<'info, System>,
 }
