@@ -35,7 +35,7 @@ pub enum AuctionType {
     Ask, // Maker sells + Taker buys
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, PartialEq)]
 pub enum OrderType {
     Maker,
     Taker,
