@@ -55,10 +55,13 @@ pub fn place_multiple_orders_handler(
             }
         };
 
-        require!(
-            order_queue.orders.len() < order_queue.max_orders as usize,
-            ErrorCode::OrderQueueFull
-        );
+        if order_queue.orders.len() >= order_queue.max_orders as usize {
+            return Ok(());
+        }
+        // require!(
+        //     order_queue.orders.len() < order_queue.max_orders as usize,
+        //     ErrorCode::OrderQueueFull
+        // );
 
         let order_id = Clock::get()?.unix_timestamp as u64 + order_queue.orders.len() as u64;
 

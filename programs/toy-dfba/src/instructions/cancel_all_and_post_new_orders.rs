@@ -61,10 +61,13 @@ pub fn cancel_all_and_post_new_orders_handler(
             }
         };
 
-        require!(
-            order_queue.orders.len() < order_queue.max_orders as usize,
-            ErrorCode::OrderQueueFull
-        );
+        if order_queue.orders.len() >= order_queue.max_orders as usize {
+            return Ok(());
+        }
+        // require!(
+        //     order_queue.orders.len() < order_queue.max_orders as usize,
+        //     ErrorCode::OrderQueueFull
+        // );
 
         let order_id = Clock::get()?.unix_timestamp as u64 + order_queue.orders.len() as u64;
 

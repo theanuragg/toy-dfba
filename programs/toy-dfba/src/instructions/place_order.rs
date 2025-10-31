@@ -58,11 +58,8 @@ pub fn place_order_handler(ctx: Context<PlaceOrder>, params: PlaceOrderParams) -
     };
 
     if order_queue.orders.len() >= order_queue.max_orders as usize {
-        if params.order_type == OrderType::Taker {
-            return Ok(());
-        }
-
-        return Err(ErrorCode::OrderQueueFull.into());
+        return Ok(());
+        // return Err(ErrorCode::OrderQueueFull.into());
     }
 
     let order_id = Clock::get()?.unix_timestamp as u64 + order_queue.orders.len() as u64;
